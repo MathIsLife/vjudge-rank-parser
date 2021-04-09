@@ -8,16 +8,18 @@ map <string, map <int, int>> penalties;
 int main() {
   ifstream in;
   ofstream out("out.txt");
-  int contestCount = 5;
+  int contestCount = 20;
   for (int id = 1; id <= contestCount; ++id) {
     string input = "contest-" + to_string(id) + ".txt";
     in.open(input);
     string bloodyHTML = "", line;
     while (getline(in, line)) bloodyHTML += line;
-    string pattern = "<div><a href=\"/user/";
+    string pattern = "<td class=\"team meta\"";
     for (int i = 0; i + pattern.size() <= bloodyHTML.size(); ++i) {
       if (bloodyHTML.substr(i, pattern.size()) == pattern) {
         int j = i;
+        string div = "<div>";
+        while (bloodyHTML.substr(j, div.size()) != div) ++j;
         string title = "title=\"";
         while (bloodyHTML.substr(j, title.size()) != title) ++j;
         j += title.size();
@@ -26,10 +28,9 @@ int main() {
         if (bloodyHTML[j] == ' ') {
           ++j; while (bloodyHTML[j] != '\"') nick += bloodyHTML[j++];
         }
-        string solvedPattern = "<td class=\"solved meta\">";
+        string solvedPattern = "<a href=\"#status/" + handle + "/-/0/\">";
         while (bloodyHTML.substr(j, solvedPattern.size()) != solvedPattern) ++j;
         j += solvedPattern.size();
-        while (bloodyHTML[j] != '>') ++j; ++j;
         string solvedString = "";
         while (isdigit(bloodyHTML[j])) solvedString += bloodyHTML[j++];
         string penaltyPattern = "<span class=\"minute\">";
@@ -95,5 +96,4 @@ int main() {
   out << '\n';
   return 0;
 }
-
 
