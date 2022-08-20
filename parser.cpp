@@ -28,7 +28,7 @@ int main() {
         if (bloodyHTML[j] == ' ') {
           ++j; while (bloodyHTML[j] != '\"') nick += bloodyHTML[j++];
         }
-        string solvedPattern = "<a href=\"#status/" + handle + "/-/0/\">";
+        string solvedPattern = "solved meta\"><span>";
         while (bloodyHTML.substr(j, solvedPattern.size()) != solvedPattern) ++j;
         j += solvedPattern.size();
         string solvedString = "";
